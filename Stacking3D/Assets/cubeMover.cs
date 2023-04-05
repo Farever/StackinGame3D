@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class cubeMover : MonoBehaviour
 {
+    public GameObject thisOBJ;
     Rigidbody rb;
-    public float m_Thrust = 50f;
+    public float m_Thrust = 1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,14 +16,40 @@ public class cubeMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        while (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D))
         {
-            rb.AddForce(transform.right * m_Thrust);
+            rb.AddForce(m_Thrust, 0, 0, ForceMode.Impulse);
         }
 
-        while (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            rb.AddForce(transform.right * (-(m_Thrust)));
+            rb.AddForce(-(m_Thrust), 0, 0, ForceMode.Impulse);
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(thisOBJ.GetComponent<cubeMover>().enabled)
+        {
+            rb = GetComponent<Rigidbody>();
+            rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+            rb.constraints = RigidbodyConstraints.None;
+
+            StartCoroutine(points());
+
+        }
+
+    }
+
+    public IEnumerator points()
+    {
+        yield return new WaitForSeconds(1);
+
+        GameObject gamemanager = GameObject.FindWithTag("GameController");
+        if (gamemanager.GetComponent<gamemanager>().maxHeight < transform.position.y)
+            gamemanager.GetComponent<gamemanager>().maxHeight = transform.position.y;
+
+        thisOBJ.GetComponent<cubeMover>().enabled = false;
+
     }
 }

@@ -361,7 +361,6 @@
 "Assets/cubeMover.cs"
 "Assets/fixPosition.cs"
 "Assets/Scripts/gamemanager.cs"
-"Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:9.0
 
 /deterministic
